@@ -1,9 +1,10 @@
-<?php 
+<?php
 require_once 'functions.php';
 $departements = getDepartmentswithcoll();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@ $departements = getDepartmentswithcoll();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 </head>
+
 <body>
 
     <div class="top-bar">
@@ -18,7 +20,26 @@ $departements = getDepartmentswithcoll();
             <h1>Gestion des départements</h1>
         </div>
     </div>
-
+    <form action="traitement_recherche.php?index=1" method="post">
+        <div class="search-bar">
+            <div class="container d-flex justify-content-center">
+                <input type="text" name="search" class="form-control search-input"
+                    placeholder="Rechercher un département...">
+                <button type="submit" class="btn btn-primary search-button">Rechercher</button>
+            </div>
+        </div>
+    </form>
+    <form action="traitement_recherche.php?index=2" method="post">
+        <div class="search-bar">
+            <div class="container d-flex justify-content-center">
+                <input type="text" name="Name" placeholder="Nom de l'employe a rechercher"
+                    class="form-control search-input">
+                <input type="number" name="age_min" class="form-control search-input" placeholder="Âge minimum">
+                <input type="number" name="age_max" class="form-control search-input" placeholder="Âge maximum">
+                <button type="submit" class="btn btn-primary search-button">Rechercher</button>
+            </div>
+        </div>
+    </form>
     <div class="container pb-5">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -37,16 +58,20 @@ $departements = getDepartmentswithcoll();
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($departements as $departement) : ?>
+                            <?php foreach ($departements as $departement): ?>
                                 <tr>
                                     <td>
                                         <a href="traitement.php?dept_num=<?= $departement['dept_no'] ?>" class="dept-link">
                                             <?= htmlspecialchars($departement['dept_name']) ?>
                                         </a>
                                     </td>
-                                    <td><?= htmlspecialchars($departement['first_name'] . ' ' . $departement['last_name']) ?></td>
-                                    <td class="hide-mobile"><span class="badge-date"><?= htmlspecialchars($departement['from_date']) ?></span></td>
-                                    <td class="hide-mobile"><span class="badge-date"><?= htmlspecialchars($departement['to_date']) ?></span></td>
+                                    <td><?= htmlspecialchars($departement['first_name'] . ' ' . $departement['last_name']) ?>
+                                    </td>
+                                    <td class="hide-mobile"><span
+                                            class="badge-date"><?= htmlspecialchars($departement['from_date']) ?></span>
+                                    </td>
+                                    <td class="hide-mobile"><span
+                                            class="badge-date"><?= htmlspecialchars($departement['to_date']) ?></span></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -58,4 +83,5 @@ $departements = getDepartmentswithcoll();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

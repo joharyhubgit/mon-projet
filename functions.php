@@ -52,3 +52,50 @@ function getAllEmployeesinDept($num)
     }
     return $employees;
 }
+
+function rechercheDepartement($nomdepartement){
+    $sql = "SELECT * FROM departments WHERE dept_name LIKE '%%%s%%' LIMIT 20";
+    $sql = sprintf($sql, $nomdepartement);
+    $result = mysqli_query(dbconnect(), $sql);
+    $departements = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $departements[] = $row;
+    }
+    return $departements;
+}
+function rechecheEmploye($nom){
+    $sql = "SELECT * FROM employees WHERE first_name LIKE '%%%s%%' OR last_name LIKE '%%%s%%' LIMIT 20";
+    $sql = sprintf($sql, $nom, $nom);
+    $result = mysqli_query(dbconnect(), $sql);
+    $employes = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $employes[] = $row;
+    }
+    return $employes;
+}
+function rechercheAge($ageMin, $ageMax){
+    $sql = "SELECT * FROM employees WHERE birth_date BETWEEN DATE_SUB(CURDATE(), INTERVAL %d YEAR) AND DATE_SUB(CURDATE(), INTERVAL %d YEAR) LIMIT 20";
+    $sql = sprintf($sql, $ageMax, $ageMin);
+    $result = mysqli_query(dbconnect(), $sql);
+    $employes = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $employes[] = $row;
+    }
+    return $employes;
+}
+function searchEmployeByNameAndAge($name, $ageMin, $ageMax) {
+    if($name == null){
+        $name = '';
+    }else if($ageMin == null && $ageMax == null){
+        $ageMin = 0;
+        $ageMax = 100;
+    }
+    $sql = "SELECT * FROM employees WHERE (first_name LIKE '%%%s%%' OR last_name LIKE '%%%s%%') AND birth_date BETWEEN DATE_SUB(CURDATE(), INTERVAL %d YEAR) AND DATE_SUB(CURDATE(), INTERVAL %d YEAR) LIMIT 20";
+    $sql = sprintf($sql, $name, $name, $ageMax, $ageMin);
+    $result = mysqli_query(dbconnect(), $sql);
+    $employes = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $employes[] = $row;
+    }
+    return $employes;
+}

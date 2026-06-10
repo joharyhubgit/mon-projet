@@ -13,7 +13,6 @@ $liste = getAllEMployeesinDept($index);
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
-
     <div class="top-bar">
         <div class="container d-flex justify-content-between align-items-center">
             <h1>
