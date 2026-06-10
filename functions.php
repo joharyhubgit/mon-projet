@@ -23,7 +23,9 @@ function getAllDepartements(){
         }
     }
     return $departements;   
-
 }
+
+    select employees.last_name, departments.* from dept_manager join employees on dept_manager.emp_no = employees.emp_no join departments on dept_manager.dept_no = departments.dept_no 
+    where dept_manager.to_date="9999-01-01" order by departments.dept_no ASC;
 
 ?>
