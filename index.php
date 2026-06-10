@@ -1,6 +1,6 @@
 <?php 
 require_once 'functions.php';
-$departements = getAllDepartements();
+$departements = getDepartmentswithcoll();
 
 ?>
 <!DOCTYPE html>
@@ -13,9 +13,22 @@ $departements = getAllDepartements();
 <body>
     <h1>Liste des departements</h1>
     <ul>
-        <?php foreach ($departements as $departement) : ?>
-            <li><?php echo $departement['dept_name']; ?></li>
-        <?php endforeach; ?>
+        <table border="1">
+            <tr>
+                <th>Department Name</th>
+                <th>Manager Name</th>
+                <th>From Date</th>
+                <th>To Date</th>
+            </tr>
+            <?php foreach ($departements as $departement) : ?>
+                <tr>
+                    <td> <a href="traitement.php?dept_num=<?= $departement['dept_no'] ?>"><?= $departement['dept_name']; ?></a></td>
+                    <td><?= $departement['first_name'] . ' ' . $departement['last_name']; ?></td>
+                    <td><?= $departement['from_date']; ?></td>
+                    <td><?= $departement['to_date']; ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
     </ul>    
 </body>
 </html>
