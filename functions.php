@@ -85,7 +85,7 @@ function getHispost($num)
     $sql = "SELECT title, t.from_date, t.to_date
 FROM employees e
 JOIN titles t ON t.emp_no = e.emp_no
-WHERE e.emp_no = '10005'
+WHERE e.emp_no = '%s'
 ORDER BY t.from_date;";
     $sql = sprintf($sql, $num);
     $result = mysqli_query(dbconnect(), $sql);
@@ -94,6 +94,7 @@ ORDER BY t.from_date;";
         $posts[] = $row;
     }
     return $posts;
+}
 function rechercheDepartement($nomdepartement){
     $sql = "SELECT * FROM departments WHERE dept_name LIKE '%%%s%%' LIMIT 20";
     $sql = sprintf($sql, $nomdepartement);
@@ -124,6 +125,7 @@ function rechercheAge($ageMin, $ageMax){
     }
     return $employes;
 }
+
 function searchEmployeByNameAndAge($name, $ageMin, $ageMax) {
     if($name == null){
         $name = '';
