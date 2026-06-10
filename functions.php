@@ -39,3 +39,20 @@ function getDepartmentswithcoll()
     }
     return $departements;
 }
+
+function getAllEmployeesinDept($num)
+{
+    $db = dbconnect();
+    $sql = "SELECT employees.* FROM employees JOIN dept_emp ON employees.emp_no = dept_emp.emp_no JOIN departments ON dept_emp.dept_no = departments.dept_no WHERE departments.dept_no = $num";
+    $stmt = mysqli_prepare($db, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $num);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $employees = [];
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $employees[] = $row;
+        }
+    }
+    return $employees;
+}
