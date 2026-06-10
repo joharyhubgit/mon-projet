@@ -12,5 +12,18 @@ function dbconnect()
     return $connect;
 }
 
+function getAllDepartements(){
+    $db = dbconnect();
+    $sql = "SECELECT * FROM departments";
+    $result = mysqli_query($db, $sql);
+    $departements = [];
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $departements[] = $row;
+        }
+    }
+    return $departements;   
+
+}
 
 ?>
