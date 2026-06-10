@@ -50,8 +50,8 @@ $liste = getAllEMployeesinDept($index);
                                 <?php foreach ($liste as $employee): ?>
                                     <tr>
                                         <td class="hide-mobile"><span class="emp-no">#<?= htmlspecialchars($employee['emp_no']) ?></span></td>
-                                        <td><?= htmlspecialchars($employee['first_name']) ?></td>
-                                        <td><strong><?= htmlspecialchars($employee['last_name']) ?></strong></td>
+                                        <td> <a href="fiche.php?num_e=<?= htmlspecialchars($employee['emp_no']) ?>"> <?= htmlspecialchars($employee['first_name']) ?></a></td>
+                                        <td><strong> <a href="fiche.php?num_e=<?= htmlspecialchars($employee['emp_no']) ?>"> <?= htmlspecialchars($employee['last_name']) ?></a></strong></td>
                                         <td>
                                             <span class="gender-badge gender-<?= htmlspecialchars($employee['gender']) ?>">
                                                 <?= $employee['gender'] === 'M' ? 'Homme' : 'Femme' ?>

@@ -53,6 +53,47 @@ function getAllEmployeesinDept($num)
     return $employees;
 }
 
+function getInfoEmployee($num)
+{
+    $db = dbconnect();
+    $sql = "SELECT * FROM employees WHERE employees.emp_no = '%s'";
+    $sql = sprintf($sql, $num);
+    $result = mysqli_query(dbconnect(), $sql);
+    return mysqli_fetch_assoc($result);
+}
+
+function getHisSalary($num)
+{
+    $db = dbconnect();
+    $sql = "SELECT salary, s.from_date, s.to_date
+FROM employees e
+JOIN salaries s ON s.emp_no = e.emp_no
+WHERE e.emp_no = '%s'
+ORDER BY s.from_date";
+    $sql = sprintf($sql, $num);
+    $result = mysqli_query(dbconnect(), $sql);
+    $salaries = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $salaries[] = $row;
+    }
+    return $salaries;
+}
+
+function getHispost($num)
+{
+    $db = dbconnect();
+    $sql = "SELECT title, t.from_date, t.to_date
+FROM employees e
+JOIN titles t ON t.emp_no = e.emp_no
+WHERE e.emp_no = '10005'
+ORDER BY t.from_date;";
+    $sql = sprintf($sql, $num);
+    $result = mysqli_query(dbconnect(), $sql);
+    $posts = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $posts[] = $row;
+    }
+    return $posts;
 function rechercheDepartement($nomdepartement){
     $sql = "SELECT * FROM departments WHERE dept_name LIKE '%%%s%%' LIMIT 20";
     $sql = sprintf($sql, $nomdepartement);
