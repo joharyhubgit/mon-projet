@@ -1,9 +1,11 @@
 <?php
+session_start();
 include 'functions.php';
 $num_e = $_GET['num_e'];
 $employee = getInfoEmployee($num_e);
 $salaries = getHisSalary($num_e);
 $postes = getHispost($num_e);
+$_SESSION["num_e"] = $num_e;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -51,7 +53,6 @@ $postes = getHispost($num_e);
         </div>
 
         <div class="row g-4">
-
             <div class="col-12 col-lg-6">
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -113,8 +114,20 @@ $postes = getHispost($num_e);
                     </div>
                 </div>
             </div>
-
         </div>
+
+        <div class="d-flex gap-3 mt-4">
+            <form action="changedepartement.php" method="post">
+                <button type="submit" class="btn btn-secondary"> Changer de département</button>
+            </form>
+
+            <form action="form_manager.php" method="post">
+                <input type="hidden" name="emp_no"  value="<?= $employee['emp_no'] ?>">
+                <input type="hidden" name="dept_no" value="<?= $_SESSION["dept_num"] ?>">
+                <button type="submit" class="btn btn-primary"> Devenir Manager</button>
+            </form>
+        </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

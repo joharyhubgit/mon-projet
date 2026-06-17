@@ -39,11 +39,22 @@ function getDepartmentswithcoll()
     }
     return $departements;
 }
-
+function getManagerActuel($dept_no)
+{
+    $conn = dbconnect();
+    $sql = "SELECT employees.first_name, employees.last_name, dept_manager.from_date 
+            FROM dept_manager
+            JOIN employees ON employees.emp_no = dept_manager.emp_no
+            WHERE dept_manager.dept_no = '%s' 
+            AND dept_manager.to_date = '9999-01-01'";
+    $sql = sprintf($sql, $dept_no);
+    $result = mysqli_query($conn, $sql);
+    return mysqli_fetch_assoc($result);
+}
 function getAllEmployeesinDept($num)
 {
     $db = dbconnect();
-    $sql = "SELECT employees.* FROM employees JOIN dept_emp ON employees.emp_no = dept_emp.emp_no JOIN departments ON dept_emp.dept_no = departments.dept_no WHERE departments.dept_no = '%s'";
+    $sql = "SELECT employees.*,dept_emp.* FROM employees JOIN dept_emp ON employees.emp_no = dept_emp.emp_no JOIN departments ON dept_emp.dept_no = departments.dept_no WHERE departments.dept_no = '%s'";
     $sql = sprintf($sql, $num);
     $result = mysqli_query(dbconnect(), $sql);
     $employees = [];
@@ -95,7 +106,8 @@ ORDER BY t.from_date;";
     }
     return $posts;
 }
-function rechercheDepartement($nomdepartement){
+function rechercheDepartement($nomdepartement)
+{
     $sql = "SELECT * FROM departments WHERE dept_name LIKE '%%%s%%' LIMIT 20";
     $sql = sprintf($sql, $nomdepartement);
     $result = mysqli_query(dbconnect(), $sql);
@@ -105,7 +117,8 @@ function rechercheDepartement($nomdepartement){
     }
     return $departements;
 }
-function rechecheEmploye($nom){
+function rechecheEmploye($nom)
+{
     $sql = "SELECT * FROM employees WHERE first_name LIKE '%%%s%%' OR last_name LIKE '%%%s%%' LIMIT 20";
     $sql = sprintf($sql, $nom, $nom);
     $result = mysqli_query(dbconnect(), $sql);
@@ -115,7 +128,8 @@ function rechecheEmploye($nom){
     }
     return $employes;
 }
-function rechercheAge($ageMin, $ageMax){
+function rechercheAge($ageMin, $ageMax)
+{
     $sql = "SELECT * FROM employees WHERE birth_date BETWEEN DATE_SUB(CURDATE(), INTERVAL %d YEAR) AND DATE_SUB(CURDATE(), INTERVAL %d YEAR) LIMIT 20";
     $sql = sprintf($sql, $ageMax, $ageMin);
     $result = mysqli_query(dbconnect(), $sql);
@@ -126,10 +140,11 @@ function rechercheAge($ageMin, $ageMax){
     return $employes;
 }
 
-function searchEmployeByNameAndAge($name, $ageMin, $ageMax) {
-    if($name == null){
+function searchEmployeByNameAndAge($name, $ageMin, $ageMax)
+{
+    if ($name == null) {
         $name = '';
-    }else if($ageMin == null && $ageMax == null){
+    } else if ($ageMin == null && $ageMax == null) {
         $ageMin = 0;
         $ageMax = 100;
     }
@@ -142,3 +157,85 @@ function searchEmployeByNameAndAge($name, $ageMin, $ageMax) {
     }
     return $employes;
 }
+function getIddepartement($nom_dept)
+{
+    $sql = "select dept_no from departments where dept_name='%s'";
+    $sql = sprintf($sql, $nom_dept);
+    $query = mysqli_query(dbconnect(), $sql);
+    $resultat = mysqli_fetch_assoc($query);
+    return $resultat['dept_no'];
+}
+
+function getNamedept($dept_no)
+{
+    $sql = "select dept_name from departments where dept_no='%s'";
+    $sql = sprintf($sql, $dept_no);
+    $query = mysqli_query(dbconnect(), $sql);
+    $resultat = mysqli_fetch_assoc($query);
+    return $resultat['dept_name'];
+}
+
+
+function getactualdept($dept_no, $emp_no)
+{
+    $sql = "SELECT * from dept_emp where dept_no='%s' and emp_no='%s'";
+    $sql = sprintf($sql, $dept_no, $emp_no);
+    $resultat1 = mysqli_query(dbconnect(), $sql);
+    $resultat = [];
+    while ($row = mysqli_fetch_assoc($resultat1)) {
+        $resultat[] = $row;
+    }
+    return $resultat;
+}
+function ChangeDepartments($num_e, $nom_dept, $dateDebut)
+{
+    $sql_before = "SELECT from_date FROM dept_emp WHERE emp_no = '%d' AND to_date = '9999-01-01' ORDER BY from_date DESC LIMIT 1";
+    $sql_before = sprintf($sql_before, $num_e);
+    $result = mysqli_query(dbconnect(), $sql_before);
+    $row = mysqli_fetch_assoc($result);
+    $date_actu = $row['from_date'];
+
+    if (strtotime($dateDebut) <= strtotime($date_actu)) {
+        return 2;
+    } else {
+        $id_dept = getIddepartement($nom_dept);
+        $sql = "INSERT into dept_emp(emp_no,dept_no,from_date,to_date) values ('%d','%s','%s','9999-01-01')";
+        $sql = sprintf($sql, $num_e, $id_dept, $dateDebut);
+        $query = mysqli_query(dbconnect(), $sql);
+        if ($query) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+} 
+
+function isDejaManager($emp_no, $dept_no) {
+    $conn = dbconnect();
+    $sql = sprintf(
+        "SELECT emp_no FROM dept_manager 
+         WHERE emp_no = %d 
+         AND dept_no = '%s'
+         AND to_date = '9999-01-01'",
+        $emp_no, $dept_no
+    );
+    return mysqli_num_rows(mysqli_query($conn, $sql)) > 0;
+}
+
+function insertNouveauManager($emp_no, $dept_no, $dateDebut) {
+    $conn = dbconnect();
+
+    $sqlUpdate = "UPDATE dept_manager 
+                  SET to_date = '%s' 
+                  WHERE dept_no = '%s' 
+                  AND to_date = '9999-01-01'";
+    $sqlUpdate = sprintf($sqlUpdate, $dateDebut, $dept_no);
+    mysqli_query($conn, $sqlUpdate);
+
+    $sqlInsert = "INSERT INTO dept_manager (emp_no, dept_no, from_date, to_date) 
+                  VALUES (%d, '%s', '%s', '9999-01-01')";
+    $sqlInsert = sprintf($sqlInsert, $emp_no, $dept_no, $dateDebut);
+    return mysqli_query($conn, $sqlInsert);
+}
+
+

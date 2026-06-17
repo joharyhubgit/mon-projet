@@ -1,5 +1,7 @@
 <?php 
+session_start();
 $index = $_GET["dept_num"];
+$_SESSION["dept_num"] = $index;
 require_once 'functions.php';
 $liste = getAllEMployeesinDept($index);
 ?>
@@ -57,7 +59,7 @@ $liste = getAllEMployeesinDept($index);
                                                 <?= $employee['gender'] === 'M' ? 'Homme' : 'Femme' ?>
                                             </span>
                                         </td>
-                                        <td class="hide-mobile"><?= htmlspecialchars($employee['hire_date']) ?></td>
+                                        <td class="hide-mobile"><?= htmlspecialchars($employee['from_date']) ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
