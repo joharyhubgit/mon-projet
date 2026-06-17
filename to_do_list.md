@@ -50,7 +50,7 @@
 - [ok] Vérifier que le nouveau département s'affiche bien après l'ajout
 - [ok] Mettre en haut du formulaire le département actuel avec la date de début (ne pas mettre le département actuel dans la liste)
 - [ok] Mettre un message d'erreur si la date de début du nouveau département est antérieure à la date de début de l'actuel
-- [En_cours] Dans la fiche de l'employé, mettre un bouton "Devenir Manager" qui ouvre un formulaire (Date de début)
-- [ ] Vérifier dans la liste des départements qu'il est bien le nouveau manager
-- [ ] Mettre en haut du formulaire le nom du manager en cours
-- [ ] Mettre un message d'erreur si la date de début du nouveau manager est antérieure à la date de début de l'actuel
+- [ok] Dans la fiche de l'employé, mettre un bouton "Devenir Manager" qui ouvre un formulaire (Date de début)
+- [ok] Vérifier dans la liste des départements qu'il est bien le nouveau manager
+- [ok] Mettre en haut du formulaire le nom du manager en cours
+- [ok] Mettre un message d'erreur si la date de début du nouveau manager est antérieure à la date de début de l'actuel
