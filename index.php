@@ -55,6 +55,7 @@ $departements = getDepartmentswithcoll();
                                 <th>Manager</th>
                                 <th class="hide-mobile">Date de début</th>
                                 <th class="hide-mobile">Date de fin</th>
+                                <th class="hide-mobile">Nombre d'employées</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,6 +73,8 @@ $departements = getDepartmentswithcoll();
                                     </td>
                                     <td class="hide-mobile"><span
                                             class="badge-date"><?= htmlspecialchars($departement['to_date']) ?></span></td>
+                                    <td class="hide-mobile"><span
+                                            class="badge-date"><?= htmlspecialchars($departement['nb_employees']) ?></span></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -79,6 +82,7 @@ $departements = getDepartmentswithcoll();
                 </div>
             </div>
         </div>
+        <a href="nb_employees.php">voir-nombre d'employées par sexe</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

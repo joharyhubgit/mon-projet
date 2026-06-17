@@ -17,27 +17,27 @@ function getAllDepartements()
     $db = dbconnect();
     $sql = "SELECT * FROM departments";
     $result = mysqli_query($db, $sql);
-    $departements = [];
+    $nb_employees = [];
     if ($result) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $departements[] = $row;
+            $nb_employees[] = $row;
         }
     }
-    return $departements;
+    return $nb_employees;
 }
 
 function getDepartmentswithcoll()
 {
     $db = dbconnect();
-    $sql = "SELECT      departments.dept_no,     departments.dept_name,     employees.emp_no,     dept_manager.from_date,     dept_manager.to_date,     employees.birth_date,     employees.first_name,     employees.last_name,     employees.gender,     employees.hire_date FROM departments JOIN dept_manager ON departments.dept_no = dept_manager.dept_no JOIN employees ON dept_manager.emp_no = employees.emp_no where dept_manager.to_date='9999-01-01' order by departments.dept_no ASC";
+    $sql = "SELECT      departments.dept_no,     departments.dept_name,     employees.emp_no,     dept_manager.from_date,     dept_manager.to_date,     employees.birth_date,     employees.first_name,     employees.last_name,     employees.gender,     employees.hire_date, tablecount.nb_employees FROM departments JOIN dept_manager ON departments.dept_no = dept_manager.dept_no JOIN employees ON dept_manager.emp_no = employees.emp_no join(select dept_no, count(dept_emp.emp_no) as nb_employees from dept_emp group by dept_no) as tablecount on departments.dept_no = tablecount.dept_no where dept_manager.to_date='9999-01-01' order by departments.dept_no ASC";
     $result = mysqli_query($db, $sql);
-    $departements = [];
+    $nb_employees = [];
     if ($result) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $departements[] = $row;
+            $nb_employees[] = $row;
         }
     }
-    return $departements;
+    return $nb_employees;
 }
 function getManagerActuel($dept_no)
 {
@@ -111,11 +111,11 @@ function rechercheDepartement($nomdepartement)
     $sql = "SELECT * FROM departments WHERE dept_name LIKE '%%%s%%' LIMIT 20";
     $sql = sprintf($sql, $nomdepartement);
     $result = mysqli_query(dbconnect(), $sql);
-    $departements = [];
+    $nb_employees = [];
     while ($row = mysqli_fetch_assoc($result)) {
-        $departements[] = $row;
+        $nb_employees[] = $row;
     }
-    return $departements;
+    return $nb_employees;
 }
 function rechecheEmploye($nom)
 {
@@ -239,3 +239,31 @@ function insertNouveauManager($emp_no, $dept_no, $dateDebut) {
 }
 
 
+
+function gettablenbemployeesparsexe()
+{
+    $db = dbconnect();
+    $sql = "SELECT gender, COUNT(emp_no) AS nb_employees FROM employees GROUP BY gender";
+    $result = mysqli_query($db, $sql);
+    $nb_employees = [];
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $nb_employees[] = $row;
+        }
+    }
+    return $nb_employees;
+}
+
+function gettablesalaireparemploi()
+{
+    $db = dbconnect();
+    $sql = "SELECT title, AVG(salary) AS salaire_moyen FROM salaries JOIN titles ON salaries.emp_no = titles.emp_no GROUP BY title ORDER BY salaire_moyen DESC";
+    $result = mysqli_query($db, $sql);
+    $salaire = [];
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $salaire[] = $row;
+        }
+    }
+    return $salaire;
+}
